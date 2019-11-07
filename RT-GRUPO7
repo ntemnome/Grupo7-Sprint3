@@ -1,0 +1,37 @@
+enable
+configure terminal
+hostname RT-01
+banner motd "ACESSO AUTORIZADO APENAS PARA O DEPARTAMENTO DE TI!"
+enable secret  SenhadaEnable 
+ip domain-name grupo7.local
+username kaue privilege 15 secret senai123
+username filipe privilege 15 secret senai123
+username vinicius privilege 15 secret senai123
+username pedro privilege 15 secret senai123
+username guilherme privilege 15 secret senai123
+login block-for 4 attempts 7 within 10
+security passwords min-length 8
+crypto key generate rsa general-keys modulus 1024
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 5
+line console 0
+password SenhadaConsole
+login
+exit
+interface gigabitethernet 0/2
+no shutdown
+exit
+interface gigabitethernet 0/2.27
+encapsulation dot1q 27
+ip address 192.168.27.1 255.255.255.0
+ip helper-address 192.168.248.5
+description VLAN27
+exit
+interface gigabitethernet 0/2.127
+encapsulation dot1q 127
+ip address 192.168.248.1 255.255.255.0
+description VLAN127
+exit
+do wr

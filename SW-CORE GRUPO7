@@ -1,0 +1,46 @@
+enable
+configure terminal
+hostname SW-CORE
+banner motd "ACESSO AUTORIZADO APENAS PARA O DEPARTAMENTO DE TI!"
+ip default-gateway 192.168.248.1
+enable secret  SenhadaEnable 
+ip domain-name grupo7.local
+username kaue privilege 15 secret senai123
+username filipe privilege 15 secret senai123
+username vinicius privilege 15 secret senai123
+username pedro privilege 15 secret senai123
+username guilherme privilege 15 secret senai123
+crypto key generate rsa general-keys modulus 1024
+line vty 0 15
+transport input ssh
+login local
+exec-timeout 5
+line console 0
+password SenhadaConsole
+login
+vlan 127
+name VLAN127
+vlan 27
+name VLAN27
+vlan 99
+name NATIVA
+exit
+interface vlan 127
+ip address 192.168.248.254 255.255.255.0
+exit
+interface gigabitethernet 0/2
+switchport mode trunk
+switchport trunk allowed vlan 27,127,99
+switchport trunk native vlan 99
+exit
+interface gigabitethernet 0/1
+switchport mode trunk
+switchport trunk allowed vlan 27,127,99
+switchport trunk native vlan 99
+exit
+interface fastEthernet 0/19
+switchport mode access
+switchport access vlan 127
+description SRV-01
+exit
+do wr
